@@ -1,0 +1,38 @@
+version: "3.1"
+
+services:
+
+  mysql_db:
+    image: mariadb
+    restart: always
+    ports: 
+      - 3316:3306
+    volumes: 
+      - mysql_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: films
+      MYSQL_USER: ztach
+      MYSQL_PASSWORD: dziadek
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'      
+
+  mywp:
+    image: wordpress
+    restart: always
+    ports: 
+      - 7077:80
+    volumes: 
+      - mywp:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mysql_db
+      WORDPRESS_DB_USER: ztach
+      WORDPRESS_DB_PASSWORD: dziadek
+      WORDPRESS_DB_NAME: mywp 
+
+    depends_on: 
+      - mysql_db
+    links: 
+      - mysql_db
+
+volumes: 
+  mysql_db:
+  mywp:
